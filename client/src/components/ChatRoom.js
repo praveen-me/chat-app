@@ -1,12 +1,66 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import chat from '../store/actions/chatActions';
+import {Redirect} from 'react-router-dom';
 
 class ChatRoom extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading : true,
+      roomName : ''
+    }
+  }
+  
+  componentDidMount() {
+    this.props.dispatch(chat.getAllChatRooms((isSucced) => {
+      if(isSucced) {
+        this.setState({
+          isLoading : false
+        })
+      }
+    }))
+  }
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name] : e.target.value
+    })
+  }
+ 
+  handleSubmit = e => {
+    e.preventDefault();
+    const {dispatch, history, username} = this.props;
+    
+    this.setState({
+      isLoading : true
+    })
+
+    dispatch(chat.setChatRoom(
+      {
+      roomName : this.state.roomName,
+      author : username
+      },
+      (isSucced) => {
+        if(isSucced) {
+          history.push(`/${this.state.roomName}`)      
+        }
+      }
+    ))
+  }
+
   render() {
-    const {chatRooms} = this.props;
+    const {chatRooms, username} = this.props;
+    console.log(chatRooms)
+    const {isLoading} = this.state;
+
+    if(!username) return <Redirect to="/login" />
+
     return (
       <div className="list-chatroom">
         {
+          isLoading ? 
+          <p>Loading...</p> : 
           chatRooms.length > 0 ? (
             chatRooms.map(room => (
               <div className="chat-room" key={room._id} id={room._id}>
@@ -17,8 +71,8 @@ class ChatRoom extends Component {
             <div className="no-chat">
               <p>No chatroom available.</p>
               <p>Make your own Chatroom.</p>
-              <form>
-                <input type="text" name="roomName" id=""/>
+              <form onSubmit={this.handleSubmit}>
+                <input type="text" name="roomName" id="" onChange={this.handleChange}/>
                 <button type="submit">Add Chat Room</button>
               </form>
             </div>
@@ -31,7 +85,8 @@ class ChatRoom extends Component {
 
 function mapStateToProps(state) {
   return {
-    chatRooms : state.chatRooms
+    username : state.username,
+    chatRooms : state.chatRooms,
   }
 } 
 
