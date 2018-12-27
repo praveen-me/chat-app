@@ -1,5 +1,6 @@
 const initState = {
-  username : null
+  username : null,
+  chatRooms : []
 }
 
 function rootReducer(state = initState, action) {

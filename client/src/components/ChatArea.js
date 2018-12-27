@@ -41,11 +41,21 @@ class ChatArea extends Component {
   
   render() { 
     const {username} = this.props;
+    const {messages} = this.state;
     if(!username) return <Redirect to="/login"/>
     
     return (
       <div>
-        <div className="messages"></div>
+        <div className="messages">
+          {
+            messages && messages.map(message => (
+              <div>
+                <p>{message.author}</p>
+                <p>{message.message}</p>
+              </div>
+            ))
+          }
+        </div>
         <form action="" className="message-form" onSubmit={this.handleSubmit}>
           <input type="text" name="message" id="message" onChange={this.handleChange}/>
           <button type="submit">Submit</button>

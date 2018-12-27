@@ -2,46 +2,14 @@ import React, { Component } from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'; 
 import ChatArea from './components/ChatArea';
 import LogIn from './components/LogIn';
+import ChatRoom from './components/ChatRoom';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      message : '',
-      messages : []
-    }
-  }
-  
-  // handleChange = e => {
-  //   this.setState({
-  //     [e.target.name] : e.target.value
-  //   })
-  // }
-  
-  // handleSubmit = e => {
-  //   e.preventDefault();
-  //   (() => {
-  //     socket.emit('message', this.state.message);
-  //     document.getElementById('message').value = ''
-  //     return false;
-  //   })()
-  // }
-
-  
-  // <div className="App">
-  //   <div id="messages"></div>
-  //   <form action="" className="message-form" onSubmit={this.handleSubmit}>
-  //     <input type="text" name="message" id="message" onChange={this.handleChange}/>
-  //     <button type="submit">Submit</button>
-  //   </form>
-  // </div>
-  
-  
+class App extends Component {  
   render() {    
     return (
       <Router>
         <React.Fragment>
-          <Route path="/" exact component={ChatArea} />
+          <Route path="/" exact component={ChatRoom} />
           <Switch>
             <Route path="/login" component={LogIn} />      
           </Switch>   
