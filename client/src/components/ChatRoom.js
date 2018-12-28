@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import chat from '../store/actions/chatActions';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 
 class ChatRoom extends Component {
   constructor(props) {
@@ -43,7 +43,10 @@ class ChatRoom extends Component {
       },
       (isSucced) => {
         if(isSucced) {
-          history.push(`/${this.state.roomName}`)      
+          // history.push(`/${this.state.roomName}`)
+          this.setState({
+            isLoading : false
+          })      
         }
       }
     ))
@@ -62,11 +65,23 @@ class ChatRoom extends Component {
           isLoading ? 
           <p>Loading...</p> : 
           chatRooms.length > 0 ? (
-            chatRooms.map(room => (
-              <div className="chat-room" key={room._id} id={room._id}>
-              {room.name}
+            <div>
+                {
+                  chatRooms && chatRooms.map(room => (
+                    <Link to={`/${room._id}/chat`} key={room._id}>
+                      <div className="chat-room" id={room._id}>
+                      {room.name}
+                      </div>
+                    </Link>
+                  ))
+                }
+                OR
+                <p>Make your own Chatroom.</p>
+                <form onSubmit={this.handleSubmit}> 
+                  <input type="text" name="roomName" id="" onChange={this.handleChange}/>
+                  <button type="submit">Add Chat Room</button>
+                </form>
               </div>
-            ))
           ) : (
             <div className="no-chat">
               <p>No chatroom available.</p>

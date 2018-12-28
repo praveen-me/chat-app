@@ -1,14 +1,24 @@
-const uri = 'http://localhost:4000/api/v1'
+const uri = 'http://localhost:4000/api/v1';
 
 const chat = {
   getAllChatRooms : (cb) => {
-    console.log('called')
     return (dispatch) => {
       fetch(`${uri}/chat-rooms`)
-      .then(res => res.json())
-      .then(data => {
-        cb(true)
-        console.log(data);
+      .then(res => {
+        if(res.status === 302) {
+          res.json()
+            .then((data) => cb(data.msg))
+        } else {
+          res.json()
+            .then(data => {
+              cb(true);
+              console.log(data)
+              return dispatch({
+              type : 'SET_ALL_CHATROOMS',
+                chatRooms : data.chatRooms
+              })
+            })
+        }
       });
     }
   },
@@ -25,8 +35,20 @@ const chat = {
       .then(res => res.json())
       .then(data => {
         cb(true)
-        console.log(data);
+        return dispatch({
+          type : 'SET_ALL_CHATROOMS',
+          chatRooms : data.chatRooms
+        })
       });
+    }
+  },
+  getAllMessagesForChatRoom : (chatRoomId, cb) => {
+    return (dispatch) => {
+      fetch(`${uri}/chat-rooms/${chatRoomId}`)
+        .then(res => res.json())
+        .then(data => {
+          cb(data)
+        })
     }
   }
 }

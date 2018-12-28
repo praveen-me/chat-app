@@ -12,6 +12,7 @@ class App extends Component {
           <Route path="/" exact component={ChatRoom} />
           <Switch>
             <Route path="/login" component={LogIn} />      
+            <Route path="/:roomId/chat" exact component={ChatArea} />
           </Switch>   
         </React.Fragment>     
       </Router>
