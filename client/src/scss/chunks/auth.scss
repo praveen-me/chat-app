@@ -1,0 +1,50 @@
+.user-form {
+  font-size: 1.3rem;
+  max-width: 600px;
+  width: 90%;
+  label {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 0.5rem 0;
+    text-transform: uppercase;
+  }
+}
+
+.text-field {
+  font-size: 1.2rem;
+  font-family: 'PT Sans', sans-serif;
+  border: none;
+  display: block;
+  padding: 0.5rem;
+  margin: 1rem 0;
+  width: 100%;
+  border-radius: 5px;
+  background: #dcdada;
+  transition: all ease 0.2s;
+  &:focus {
+    box-shadow: 0px 0px 0px 6px #0000004a;
+    outline: none;
+  }
+}
+
+.form-wrapper {
+  height: 100vh; 
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),url('https://images.unsplash.com/photo-1477414348463-c0eb7f1359b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80') no-repeat center;
+  background-size: cover;
+  color: #fff
+}
+
+.start-block {
+  width: 600px;
+}
+
+.submit {
+  background: #2196F3;
+  font-weight: 300;
+  color: #fff;
+  font-family: 'Sarabun', sans-serif;
+  &:hover {
+    background: rgb(19, 88, 145);    
+  }
+}

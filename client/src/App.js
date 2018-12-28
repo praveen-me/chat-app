@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import ChatArea from './components/ChatArea';
 import LogIn from './components/LogIn';
 import ChatRoom from './components/ChatRoom';
-
+import './scss/app.scss';
 class App extends Component {  
   render() {    
     return (

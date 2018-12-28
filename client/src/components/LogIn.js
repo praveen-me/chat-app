@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import auth from '../store/actions/authActions';
 import {connect} from 'react-redux';
+import styled, {css} from 'styled-components';
+
+
+const FormHead = styled.h1`
+  font-size : 1.5rem;
+  color : red;
+`
 
 class LogIn extends Component {
   state = {
@@ -27,12 +34,19 @@ class LogIn extends Component {
 
   render() {
     return (
-      <div>
-        <form className="user-form" onSubmit={this.handleSubmit}>
-          <input type="text" name="username" id="" onChange={this.handleChange}/>
-          <button type="submit">Go Ahead</button>
-        </form>
-      </div>
+      <main className="form-wrapper">
+        <div className="start-block middle">
+          <form className="user-form" onSubmit={this.handleSubmit}>
+            <label htmlFor="username">
+              Enter your username
+            </label>
+            <input type="text" name="username" id="" onChange={this.handleChange} className="text-field"/>
+            <div className="right">
+              <button type="submit" className="btn submit">Go Ahead</button>
+            </div>
+          </form>
+        </div>
+      </main>
     );
   }
 }

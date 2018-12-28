@@ -1,0 +1,67 @@
+body {
+  position: relative;
+  font-family: 'Sarabun', sans-serif;
+  height: 100vh;
+}
+
+*, *:after, *:before {
+  box-sizing: border-box;
+}
+
+.center {
+  text-align: center;
+}
+
+.wrapper {
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.wrapper-big {
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+a {
+  text-decoration: none;
+}
+
+ol, ul {
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  list-style: none;
+  margin-right: 20px;
+}
+
+.color-white {
+  color : #fff
+}
+
+.middle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn {
+  font-size: 1.3rem;
+  border-radius: 5px;
+  border: none;
+  font-weight: 300;
+  cursor: pointer;
+  padding: 0.5rem;
+}
