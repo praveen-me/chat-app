@@ -13,18 +13,18 @@ const Message = require('./models/Message');
 app.use(bodyParser.json());
 app.use(cors())
 
-mongoose.connect('mongodb://localhost/chit-chatter', { useNewUrlParser: true }, (err, done) => {
+mongoose.connect('mongodb://praveen-me:PRAVEEN1234@ds145304.mlab.com:45304/chatter', { useNewUrlParser: true }, (err, done) => {
   if(err) throw err;
   console.log('connected to mongodb');
 });
 
 // App setup
-const server = app.listen(4000, function(){
+const server = app.listen(function(){
   console.log('listening for requests on port 4000,');
 });
 const io = socket(server);
 
-app.use('/api/v1/',require('./routers/api'))
+app.use('/api/v1/',require('./routers/api'));
 
 io.on('connection', (socket) => {
   console.log('user is connected');
