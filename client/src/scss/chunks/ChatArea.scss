@@ -1,0 +1,20 @@
+.message-form{
+  display: flex;
+  margin: 0.5rem 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  input[type="text"] {
+    box-shadow: none;
+    margin: 0;
+    padding: 1rem;
+    border-radius : 0px;
+  }
+  button {
+    border-radius: 0px;
+    background: rgb(5, 122, 177);
+    color: #fff;
+    padding: 0 1.5rem;
+    font-family: inherit;
+  }
+}

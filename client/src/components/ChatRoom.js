@@ -57,7 +57,7 @@ class ChatRoom extends Component {
     console.log(chatRooms)
     const {isLoading} = this.state;
 
-    if(!username) return <Redirect to="/login" />
+    // if(!username) return <Redirect to="/login" />
 
     return (
       <div className="list-chatroom">
@@ -65,30 +65,31 @@ class ChatRoom extends Component {
           isLoading ? 
           <p>Loading...</p> : 
           chatRooms.length > 0 ? (
-            <div>
+            <div className="wrapper">
+                <p className="select-chatroom">Select your Chatroom</p>
                 {
-                  chatRooms && chatRooms.map(room => (
-                    <Link to={`/${room._id}/chat`} key={room._id}>
+                  chatRooms && chatRooms.map((room, i) => (
+                    <Link to={`/${room._id}/chat`} key={room._id} className="chatroom-block">
                       <div className="chat-room" id={room._id}>
-                      {room.name}
+                      {i+1}. {room.name}
                       </div>
                     </Link>
                   ))
                 }
-                OR
-                <p>Make your own Chatroom.</p>
-                <form onSubmit={this.handleSubmit}> 
-                  <input type="text" name="roomName" id="" onChange={this.handleChange}/>
-                  <button type="submit">Add Chat Room</button>
+                <p className="seperator">OR</p>
+                <p className="make-chatroom">Make your own Chatroom</p>
+                <form onSubmit={this.handleSubmit} className="chatroom-form"> 
+                  <input type="text" name="roomName" id="" onChange={this.handleChange} className="text-field"/>
+                  <button type="submit" className="btn submit">Add Chat Room</button>
                 </form>
               </div>
           ) : (
-            <div className="no-chat">
-              <p>No chatroom available.</p>
-              <p>Make your own Chatroom.</p>
-              <form onSubmit={this.handleSubmit}>
-                <input type="text" name="roomName" id="" onChange={this.handleChange}/>
-                <button type="submit">Add Chat Room</button>
+            <div className="no-chat wrapper">
+              <p className="seperator">OR</p>
+              <p className="make-chatroom">Make your own Chatroom</p>
+              <form onSubmit={this.handleSubmit} className="chatroom-form"> 
+                <input type="text" name="roomName" id="" onChange={this.handleChange} className="text-field"/>
+                <button type="submit" className="btn submit">Add Chat Room</button>
               </form>
             </div>
           )

@@ -63,14 +63,14 @@ class ChatArea extends Component {
   render() { 
     const {username} = this.props;
     const {messages, isLoading} = this.state;
-    if(!username) return <Redirect to="/login"/>
+    // if(!username) return <Redirect to="/login"/>
     
     return (
       isLoading ? 
       <p>Loading...</p> : 
       (
-        <div>
-          <div className="messages">
+        <div className="">
+          <div className="messages wrapper">
             {
               messages && messages.map(message => (
                 <div>
@@ -81,8 +81,8 @@ class ChatArea extends Component {
             }
           </div>
           <form action="" className="message-form" onSubmit={this.handleSubmit}>
-            <input type="text" name="message" id="message" onChange={this.handleChange}/>
-            <button type="submit">Submit</button>
+            <input type="text" name="message" id="message" onChange={this.handleChange} className="text-field"/>
+            <button type="submit" className="btn">Submit</button>
           </form>
         </div>
       )
