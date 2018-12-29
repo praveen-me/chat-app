@@ -12,7 +12,8 @@ class ChatArea extends Component {
       message : '',
       messages : [],
       isLoading : true,
-      infoMsg : ''
+      infoMsg : '',
+      currentChatRoom : ''
     }
   }
 
@@ -27,6 +28,7 @@ class ChatArea extends Component {
       } else {
         this.setState({
           isLoading : false,
+          currentChatRoom : data.room.name,
           messages : [...this.state.messages, ...data.room.messages]
         })
       }
@@ -43,18 +45,26 @@ class ChatArea extends Component {
     e.preventDefault();
     const {message} = this.state;
     const {username, roomId} = this.props;
-    socket.emit('message', {
-      message,
-      author : username, 
-      currentChatRoomId : roomId
-    })
-    document.getElementById('message').value = '';
+    if (navigator.onLine) {
+      
+      socket.emit('message', {
+        message,
+        author : username, 
+        currentChatRoomId : roomId
+      })
+      document.getElementById('message').value = '';
+    } else {
+      this.setState({
+        infoMsg : 'Internet not available. Please connected to secure connection.'
+      })
+    }
   }
 
   getMessage = (()  =>{
     socket.on('chat', (msg) => {
       console.log(msg)
       this.setState({
+        infoMsg : '',
         messages : [...this.state.messages, msg]
       })
     })
@@ -62,30 +72,51 @@ class ChatArea extends Component {
   
   render() { 
     const {username} = this.props;
-    const {messages, isLoading} = this.state;
-    // if(!username) return <Redirect to="/login"/>
+    const {messages, isLoading, currentChatRoom, infoMsg} = this.state;
+    if(!username) return <Redirect to="/login"/>
     
     return (
       isLoading ? 
-      <p>Loading...</p> : 
-      (
-        <div className="">
-          <div className="messages wrapper">
-            {
-              messages && messages.map(message => (
-                <div>
-                  <p>{message.author}</p>
-                  <p>{message.message}</p>
+      <p>Loading...</p> : (
+        <div className="chat-area">
+          {
+            infoMsg ? <p>{`${infoMsg} ${username}`}</p> : 
+            (
+              <div>
+                <h2 className="chatroom-name">{currentChatRoom}</h2>
+                <div className="messages wrapper">
+                  {
+                    messages && messages.map(message => (
+                      message.author === username ? 
+                      (
+                        <div className="message-block block-right">
+                          <div className="message-sub_block right-sub_block">
+                            <p className="message-text">{message.message}</p>
+                            <p className="message-author">{'you'}</p>
+                          </div>
+                        </div>
+                      ) : 
+                      (
+                        <div className="message-block">
+                          <div className="message-sub_block">
+                            <p className="message-text">{message.message}</p>
+                            <p className="message-author">{message.author}</p>
+                          </div>
+                        </div>
+                      )
+                    ))
+                  }
                 </div>
-              ))
-            }
-          </div>
+              </div>
+            )
+          }
           <form action="" className="message-form" onSubmit={this.handleSubmit}>
             <input type="text" name="message" id="message" onChange={this.handleChange} className="text-field"/>
             <button type="submit" className="btn">Submit</button>
           </form>
         </div>
       )
+      
     );
   }
 }

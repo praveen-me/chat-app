@@ -57,7 +57,7 @@ class ChatRoom extends Component {
     console.log(chatRooms)
     const {isLoading} = this.state;
 
-    // if(!username) return <Redirect to="/login" />
+    if(!username) return <Redirect to="/login" />
 
     return (
       <div className="list-chatroom">

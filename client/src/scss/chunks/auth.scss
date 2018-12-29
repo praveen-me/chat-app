@@ -48,3 +48,9 @@
     background: rgb(19, 88, 145);    
   }
 }
+
+@media screen and (max-width : 540px) {
+  .start-block {
+    width: 300px;
+  }
+}
