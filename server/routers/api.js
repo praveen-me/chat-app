@@ -9,4 +9,6 @@ router.post('/chat-rooms', chatRoomController.setChatRoom);
 
 router.get('/chat-rooms/:roomId', chatRoomController.getAllMessagesForChatRoom);
 
+// router.post('/signup', chatRoomController.)
+
 module.exports = router;

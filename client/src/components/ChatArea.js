@@ -20,10 +20,10 @@ class ChatArea extends Component {
   componentDidMount() {
     const {roomId} = this.props;
     this.props.dispatch(chat.getAllMessagesForChatRoom(roomId, (data) => {
-      if(data.msg) {
+      if (data.msg) {
         this.setState({
-          infoMsg : data.msg,
-          isLoading : false  
+          infoMsg: data.msg,
+          isLoading: false  
         })
       } else {
         this.setState({

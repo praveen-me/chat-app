@@ -6,6 +6,7 @@ import ChatRoom from './components/ChatRoom';
 
 import './scss/app.scss';
 import Header from './components/Header';
+import SignUp from './components/SignUp';
 
 class App extends Component {  
   render() {    
@@ -17,6 +18,7 @@ class App extends Component {
             <Route path="/" exact component={ChatRoom} />
             <Route path="/login" component={LogIn} />      
             <Route path="/:roomId/chat" exact component={ChatArea} />
+            <Route path="/signup" component={SignUp} />
           </Switch>   
         </React.Fragment>     
       </Router>
