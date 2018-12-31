@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const chatRoomController = require('./../controllers/chatRoom.controller')
+const userController = require('./../controllers/user.controller');
 
 router.get('/wake-up', chatRoomController.wakeUp);
 
@@ -9,6 +10,6 @@ router.post('/chat-rooms', chatRoomController.setChatRoom);
 
 router.get('/chat-rooms/:roomId', chatRoomController.getAllMessagesForChatRoom);
 
-// router.post('/signup', chatRoomController.)
+router.post('/signup', userController.signUp);
 
 module.exports = router;
