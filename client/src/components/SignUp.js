@@ -7,6 +7,7 @@ class SignUp extends Component {
     super(props);
     this.state = {
       isLoading : false,
+      errMSg : '',
       userDetails : {
         username: '',
         fullName: '',
@@ -28,36 +29,55 @@ class SignUp extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.dispatch(auth.signUp(this.state.userDetails))
+    // this.setState({
+    //   isLoading : true
+    // });
+    this.props.dispatch(auth.signUp(this.state.userDetails, (signUpInfo) => {
+      if(signUpInfo === true) {
+        this.props.history.push('/login');
+      } else {
+        this.setState({
+          isLoading : false,
+          errMSg : signUpInfo.msg
+        })
+      }
+    }))
   }
 
   render() {
+    const {isLoading, errMSg} = this.state;
+    
     return (
-      <main className="form-wrapper">
-        <div className="start-block middle">
-          <form className="user-form" onSubmit={this.handleSubmit}>
-            <label htmlFor="fullName">
-              Enter your fullname
-            </label>
-            <input type="text" name="fullName" onChange={this.handleChange} className="text-field"/>
-            <label htmlFor="email">
-              Enter your email
-            </label>
-            <input type="email" name="email" onChange={this.handleChange} className="text-field"/>
-            <label htmlFor="username">
-              Enter your username
-            </label>
-            <input type="text" name="username" onChange={this.handleChange} className="text-field"/>
-            <label htmlFor="password">
-              Enter your password
-            </label>
-            <input type="password" name="password" onChange={this.handleChange} className="text-field"/>
-            <div className="right">
-              <button type="submit" className="btn submit">Go Ahead</button>
-            </div>
-          </form>
-        </div>
-      </main>
+      isLoading ? <p>Loading...</p> : (
+        <main className="form-wrapper">
+          <div className="start-block middle">
+            <form className="user-form" onSubmit={this.handleSubmit}>
+              <label htmlFor="fullName">
+                Enter your fullname
+              </label>
+              <input type="text" name="fullName" onChange={this.handleChange} className="text-field"/>
+              <label htmlFor="email">
+                Enter your email
+              </label>
+              <input type="email" name="email" onChange={this.handleChange} className="text-field"/>
+              <label htmlFor="username">
+                Enter your username
+              </label>
+              <input type="text" name="username" onChange={this.handleChange} className="text-field"/>
+              <label htmlFor="password">
+                Enter your password
+              </label>
+              <input type="password" name="password" onChange={this.handleChange} className="text-field"/>
+              {
+                errMSg ? <p className="center warning-msg">{errMSg}</p> : ''
+              }
+              <div className="right">
+                <button type="submit" className="btn submit">Go Ahead</button>
+              </div>
+            </form>
+          </div>
+        </main>
+      )
     );
   }
 }

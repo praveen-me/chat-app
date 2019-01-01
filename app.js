@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const webpack = require('webpack');
+const session = require('express-session');
+const passport = require('passport');
+const MongoStore = require('connect-mongo')(session);
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackConfig = require('./webpack.config');
 
@@ -34,6 +37,22 @@ if (process.env.NODE_ENV === 'development') {
     publicPath: webpackConfig.output.publicPath,
   }));
 }
+
+// Set cookies session
+app.use(session({
+  secret: 'pencil users',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 500000,
+  },
+  store: new MongoStore({ url: 'mongodb://localhost/altupdates-session' }),
+}));
+
+// Using middleware for passport
+app.use(passport.initialize());
+app.use(passport.session());
+require('./server/modules/passport')(passport);
 
 
 mongoose.connect('mongodb://localhost/chit-chatter', { useNewUrlParser: true }, (err, done) => {

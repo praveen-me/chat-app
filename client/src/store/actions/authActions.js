@@ -1,10 +1,15 @@
 const auth =  {
-  setUser : (data, cb) => {
-    console.log(data)
-    cb(true);
-    return {
-      type : 'SET_USER',
-      data
+  login : (data, cb) => {
+    return dispatch => {
+      fetch('/api/v1/login', {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(data => console.log(data))
     }
   },
   signUp : (data,  cb) => {
@@ -17,7 +22,17 @@ const auth =  {
         },
         body : JSON.stringify(data)
       })
-        .then(res => res.json())
+        .then(res => {
+          if (res.status === 200) {
+            cb(true)
+            return dispatch({
+              type : 'SIGNUP_SUCCESS'
+            })
+          } else {
+            res.json()
+              .then(data => cb(data))
+          }
+        })
 
     }
   }

@@ -49,6 +49,13 @@
   }
 }
 
+.warning-msg {
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
 @media screen and (max-width : 540px) {
   .start-block {
     width: 300px;

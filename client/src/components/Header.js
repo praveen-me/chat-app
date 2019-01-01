@@ -6,6 +6,9 @@ class Header extends Component {
       <header>  
         <div className="wrapper">
           <h1 className="logo">Chit Chatter</h1>
+          <div className="auth-buttons">
+    
+          </div>
         </div>
       </header> 
     );
