@@ -53,11 +53,11 @@ class ChatRoom extends Component {
   }
 
   render() {
-    const {chatRooms, username} = this.props;
-    console.log(chatRooms)
+    const {chatRooms, user} = this.props;
     const {isLoading} = this.state;
+    console.log(user)
 
-    if(!username) return <Redirect to="/login" />
+    if(!user._id) return <Redirect to="/login" />
 
     return (
       <div className="list-chatroom">
@@ -101,7 +101,7 @@ class ChatRoom extends Component {
 
 function mapStateToProps(state) {
   return {
-    username : state.username,
+    user : state.user,
     chatRooms : state.chatRooms,
   }
 } 

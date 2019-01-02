@@ -8,8 +8,21 @@ const auth =  {
         },
         body : JSON.stringify(data)
       })
-        .then(res => res.json())
-        .then(data => console.log(data))
+        .then(res => {
+          if(res.status === 200) {
+            res.json()
+              .then(data => {
+                dispatch({
+                  type: 'LOGIN_SUCCESS',
+                  user: data.data
+                })
+                return cb(true);
+              })
+          }else {
+            res.json()
+              .then(data => cb(data))
+          }
+        })
     }
   },
   signUp : (data,  cb) => {

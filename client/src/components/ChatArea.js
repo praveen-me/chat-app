@@ -44,12 +44,12 @@ class ChatArea extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const {message} = this.state;
-    const {username, roomId} = this.props;
+    const {user, roomId} = this.props;
     if (navigator.onLine) {
       
       socket.emit('message', {
         message,
-        author : username, 
+        author : user.username, 
         currentChatRoomId : roomId
       })
       document.getElementById('message').value = '';
@@ -71,23 +71,23 @@ class ChatArea extends Component {
   })()
   
   render() { 
-    const {username} = this.props;
+    const {user} = this.props;
     const {messages, isLoading, currentChatRoom, infoMsg} = this.state;
-    if(!username) return <Redirect to="/login"/>
+    if(!user.username) return <Redirect to="/login"/>
     
     return (
       isLoading ? 
       <p>Loading...</p> : (
         <div className="chat-area">
           {
-            infoMsg ? <p>{`${infoMsg} ${username}`}</p> : 
+            infoMsg ? <p>{`${infoMsg} ${user.username}`}</p> : 
             (
               <div>
                 <h2 className="chatroom-name">{currentChatRoom}</h2>
                 <div className="messages wrapper">
                   {
                     messages && messages.map(message => (
-                      message.author === username ? 
+                      message.author === user.username ? 
                       (
                         <div className="message-block block-right">
                           <div className="message-sub_block right-sub_block">
@@ -124,7 +124,7 @@ class ChatArea extends Component {
 function mapStateToProps(state, ownProps) {
   console.log(ownProps)
   return {
-    username : state.username,
+    user : state.user,
     roomId : ownProps.match.params.roomId
   }
 } 

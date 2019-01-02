@@ -37,9 +37,18 @@ class LogIn extends Component {
     const {username} = this.state;
     const {dispatch, history} = this.props;
 
+    this.setState({
+      isLoading : true
+    })
+
     dispatch(auth.login(this.state.userDetails, (isSucced) => {
+      console.log(isSucced);
       if(isSucced) {
-        history.push('/')   
+        this.setState({
+          isLoading : false
+        }, () => {
+          history.push('/');
+        })   
       }
     }))
   }

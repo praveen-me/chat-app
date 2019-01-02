@@ -1,14 +1,14 @@
 const initState = {
-  username : null,
+  user : {},
   chatRooms : []
 }
 
 function rootReducer(state = initState, action) {
   switch(action.type) {
-    case 'SET_USER' : {
+    case 'LOGIN_SUCCESS' : {
       return {
         ...state,
-        username : action.data
+        user : action.user
       }
     }
 
