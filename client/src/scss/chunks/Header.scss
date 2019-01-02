@@ -4,7 +4,23 @@ header {
   padding: 0.5rem 0;
   background: rgba(0,0,0,.6);
   color: #fff;
+  .wrapper {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+  }
 }
+
+.auth-buttons {
+  font-size: 1.2rem;
+  align-self: center;
+  a {
+    color: #fff;
+    display: inline-block;
+    margin: 0 1rem ;
+    cursor: pointer;
+  }
+}
+
 
 .logo {
   margin: 0.5rem 0;
