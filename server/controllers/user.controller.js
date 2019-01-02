@@ -47,4 +47,12 @@ module.exports = {
       });
     })(req, res, next);
   },
+  logOut : (req, res) => {
+    if(req.user) {
+      req.logOut();
+      res.status(200).json({
+        msg : 'logout successfully'
+      })
+    }   
+  }
 }

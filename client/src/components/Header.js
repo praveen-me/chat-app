@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+import auth from '../store/actions/authActions';
 
 class Header extends Component {
+  handleLogOut = e => {
+    e.preventDefault();
+    this.props.dispatch(auth.logOut())
+  }
+  
   render() {
     const {user} = this.props;
     
@@ -22,7 +28,7 @@ class Header extends Component {
               </div>
             ) : (
               <div className="auth-buttons">
-                <a className="auth-buttons">
+                <a onClick={this.handleLogOut} className="auth-buttons">
                   Log out
                 </a>
               </div>

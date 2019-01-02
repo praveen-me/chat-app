@@ -20,6 +20,15 @@ function rootReducer(state = initState, action) {
       }
     }
 
+    case 'LOGOUT_SUCCESSFULL' : {
+      console.log('logout called in reducer')
+      return {
+        ...state,
+        user : {},
+        chatRooms : [],
+      }
+    }
+
     default: return state;
   }
 }
