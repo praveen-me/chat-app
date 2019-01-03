@@ -51,8 +51,21 @@ module.exports = {
     if(req.user) {
       req.logOut();
       res.status(200).json({
-        msg : 'logout successfully'
+        msg: 'logout successfully'
       })
     }   
+  },
+  getAllUsers: (req, res) => {
+    User.find({}, { password: 0 }, (err, data) => {
+      if (err) throw err;
+      if (data.length > 0) {
+        return res.json({
+          users : data
+        })
+      } 
+      return res.status(404).json({
+        msg: 'users not found'
+      })
+    });
   }
-}
+};

@@ -16,6 +16,7 @@ const app = express();
 // Import Message and ChatRoom
 const ChatRoom = require('./server/models/ChatRoom');
 const Message = require('./server/models/Message');
+const DirectMessage = require('./server/models/DirectMessage');
 
 // necessary middlewares
 app.use(bodyParser.json());
@@ -73,11 +74,9 @@ app.use('/api/v1/',require('./server/routers/api'));
 app.use(require('./server/routers/index'));
 
 io.on('connection', (socket) => {
-  console.log('user is connected');
   socket.on('message', (msg) => {
     // Saving Message in to db and pushing the id 
     // of the message to the specific chatroom
-    console.log(msg.currentChatRoomId);
     const newMessage = new Message({
       message : msg.message,
       author : msg.author
@@ -85,10 +84,38 @@ io.on('connection', (socket) => {
     newMessage.save((err, currentMsg) => {
       // pushing id of the current msg into the 
       // specific chatroom messages field
-      console.log(currentMsg._id)
       ChatRoom.findOneAndUpdate({_id : msg.currentChatRoomId}, { $push : { messages : currentMsg._id } }, { upsert: true }, (err, done) => {
       })
     })
     io.sockets.emit('chat', msg)
+  })
+  socket.on('direct-message', (msg) => {
+    DirectMessage.findOne({ user1: msg.user1, user2: msg.user2 }, (err, data) => {
+      if(!data) {
+        const newMessage = new Message({
+          message: msg.message,
+          author: msg.author,
+        })
+        newMessage.save((err, data) => {
+          const newDirectMessage = new DirectMessage({
+            user1: msg.user1,
+            user2: msg.user2,
+            messages: [data._id] 
+          })
+          newDirectMessage.save()
+        })
+      } else {
+        const newMessage = new Message({
+          message: msg.message,
+          author: msg.author,
+        });
+        newMessage.save((err, data) => {
+          DirectMessage.findOneAndUpdate({user1 : msg.user1, user2: msg.user2}, { $push : { messages : data._id } }, { upsert: true }, (err, done) => {
+          })
+        })
+      }
+    })
+    
+    console.log(msg); 
   })
 });

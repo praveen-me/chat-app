@@ -82,6 +82,8 @@ class ChatRoom extends Component {
                   <input type="text" name="roomName" id="" onChange={this.handleChange} className="text-field"/>
                   <button type="submit" className="btn submit">Add Chat Room</button>
                 </form>
+                <p className="seperator">OR</p>
+                <Link to="/direct">Go to Direct Messages</Link>
               </div>
           ) : (
             <div className="no-chat wrapper">

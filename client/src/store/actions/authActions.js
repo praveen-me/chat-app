@@ -1,3 +1,5 @@
+import { bindActionCreators } from "redux";
+
 const auth =  {
   login : (data, cb) => {
     return dispatch => {
@@ -57,6 +59,20 @@ const auth =  {
           return dispatch({
             type : 'LOGOUT_SUCCESSFULL'
           })
+        })
+    }
+  }, 
+  getAllUsers: (cb) => {
+    return (dispatch) => {
+      console.log('getting all users')
+      fetch('/api/v1/users')
+        .then(res => res.json())
+        .then(data => {
+          dispatch({
+            type : 'GET_ALL_USERS',
+            users : data.users
+          })
+          return cb(true);
         })
     }
   }

@@ -1,6 +1,7 @@
 const initState = {
   user : {},
-  chatRooms : []
+  chatRooms : [],
+  allUsers : {}
 }
 
 function rootReducer(state = initState, action) {
@@ -26,6 +27,13 @@ function rootReducer(state = initState, action) {
         ...state,
         user : {},
         chatRooms : [],
+      }
+    }
+
+    case 'GET_ALL_USERS': {
+      return {
+        ...state,
+        allUsers : action.users
       }
     }
 

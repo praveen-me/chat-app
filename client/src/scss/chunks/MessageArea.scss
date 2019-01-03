@@ -1,0 +1,14 @@
+.direct-messages{
+  grid-template-columns: 1fr 4fr;
+  display: grid;
+}
+
+.direct-chat-area {
+  height: 88.5vh;
+  position: relative;
+}
+
+.direct-message-form{
+  margin: 0;
+  width: 80%;
+}
