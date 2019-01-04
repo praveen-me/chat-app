@@ -18,6 +18,9 @@ class DirectMessage extends Component {
       if(isDone) {
         this.setState({
           isLoading : false
+        }, () => {
+          const {user, allUsers} = this.props;
+          fetch(`/api/v1/messages?user1=${user._id}&user2=${allUsers[0]._id}`)
         })
       }
     })) 

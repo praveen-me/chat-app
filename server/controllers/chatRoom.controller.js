@@ -54,20 +54,23 @@ module.exports = {
   getAllPrivateMessages: (req, res) => {
     const {user1, user2} = req.query;
     DirectMessage.findOne({ user1, user2 }, (err,data) => {
-      if(!data) {
+      if(data === null) {
         DirectMessage.findOne({ user1 : user2, user2 : user1 }, (err, data2) => {
-          if(data) {
-            console.log(data2)
+          if(data2 !== null) {
             return res.json({
               messages : data2
             })
+          } else {
+            return res.status(302).json({
+              msg : "You don't have any message. Please send your first."
+            })
           }
         })
+      } else {
+        return res.json({
+          messages : data
+        })
       }
-      console.log(data)
-      return res.json({
-        messages : data
-      })
     })
   }
 }
