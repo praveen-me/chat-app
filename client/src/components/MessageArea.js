@@ -75,21 +75,53 @@ class MessageArea extends Component {
   getMessage = (()  =>{
     socket.on('directChat', (msg) => {
       console.log(msg)
-      this.setState({
-        infoMsg : '',
-        messages : [...this.state.messages, msg]
-      })
+      const {user, toUser} = this.props;
+      if(toUser.username === msg.author || msg.to === toUser.username) {
+        this.setState({
+          infoMsg : '',
+          messages : [...this.state.messages, msg]
+        })
+      }
     })
   })()
   
   render() {
     const {isLoading, messages, infoMsg} = this.state;
-    const {toUser} = this.props;
+    const {toUser, user} = this.props;
     
     return (
       isLoading ? 
       <p>Loading...</p> : (
         <div className="direct-chat-area chat-area">
+          <div className="current-user">
+            <h3>{toUser.username}</h3>
+          </div>
+          <div className="messages wrapper">
+            {
+              messages && messages.map(message => (
+                message.author === user.username ? 
+                (
+                  <div className="message-block block-right">
+                    <div className="message-sub_block right-sub_block">
+                      <p className="message-text">{message.message}</p>
+                      <p className="message-author">{'you'}</p>
+                    </div>
+                    {
+                      !messages.length ? <p>{`${infoMsg} ${user.username}`}</p> : ''
+                    }
+                  </div>
+                ) : 
+                (
+                  <div className="message-block">
+                    <div className="message-sub_block">
+                      <p className="message-text">{message.message}</p>
+                      <p className="message-author">{message.author}</p>
+                    </div>
+                  </div>
+                )
+              ))
+            }
+          </div>
           <form action="" className="direct-message-form message-form" onSubmit={this.handleSubmit}>
             <input type="text" name="message" id="message" onChange={this.handleChange} className="text-field"/>
             <button type="submit" className="btn">Submit</button>

@@ -123,9 +123,9 @@ io.on('connection', (socket) => {
     //   }
     // })
     // io.sockets.emit('directChat', msg)
+    socket.emit('directChat', msg);
     if(userSocketDetails[msg.to]) {
       socket.to(`${userSocketDetails[msg.to]}`).emit('directChat', msg)
-      socket.emit('directChat', msg)
     }
   })
 });

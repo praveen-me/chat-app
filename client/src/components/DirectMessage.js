@@ -39,7 +39,7 @@ class DirectMessage extends Component {
 
   render() {
     const {allUsers} = this.props;
-    const {isLoading} = this.state;
+    const {isLoading, toUser} = this.state;
 
     return (
       isLoading ? <p>Loading...</p> : (
@@ -54,7 +54,7 @@ class DirectMessage extends Component {
               ))
             }
           </div>
-          <MessageArea toUser={this.state.toUser}/>
+          <MessageArea toUser={toUser || allUsers[0]}/>
         </div>
       )    
     );
