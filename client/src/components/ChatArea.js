@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import io from 'socket.io-client';
 import chat from '../store/actions/chatActions';
-const socket = io('http://localhost:4000');
+import socket from '../socketIo';
 
 class ChatArea extends Component {
   constructor(props) {
@@ -18,6 +17,7 @@ class ChatArea extends Component {
   }
 
   componentDidMount() {
+    console.log(socket)
     const {roomId} = this.props;
     this.props.dispatch(chat.getAllMessagesForChatRoom(roomId, (data) => {
       if (data.msg) {
@@ -45,8 +45,7 @@ class ChatArea extends Component {
     e.preventDefault();
     const {message} = this.state;
     const {user, roomId} = this.props;
-    if (navigator.onLine) {
-      
+    if (navigator.onLine) { 
       socket.emit('message', {
         message,
         author : user.username, 

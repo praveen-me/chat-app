@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import chat from '../store/actions/chatActions';
 import {Redirect, Link} from 'react-router-dom';
+import socket from '../socketIo';
 
 class ChatRoom extends Component {
   constructor(props) {
@@ -20,6 +21,12 @@ class ChatRoom extends Component {
         })
       }
     }))
+    // username: this.props.user.username,
+    // socketId : socket.socket.sessionid,
+    socket.emit('socket-connected', {
+      id : socket.id,
+      username: this.props.user.username
+    })
   }
 
   handleChange = e => {

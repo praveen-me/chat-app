@@ -1,0 +1,25 @@
+.users-list {
+  background: #00968894;
+}
+
+.users-header {
+  font-size: 1.8rem;
+  margin: 0.9rem 0;
+  text-align: center;
+}
+
+.user-block {
+  button {
+    font-family: 'Thasadith', sans-serif;
+    border: none;
+    background: transparent;
+    font-size: 1.8rem;
+    width: 100%;
+    cursor: pointer;
+    transition: all ease 0.3s;
+  }&:hover {
+    padding: 0;
+    color: #fff;
+    background: #009688f0;
+  }
+}

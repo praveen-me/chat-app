@@ -45,6 +45,7 @@ class DirectMessage extends Component {
       isLoading ? <p>Loading...</p> : (
         <div className="direct-messages">
           <div className='users-list'>
+            <h2 className="users-header">Users</h2>
             {
               allUsers && allUsers.map(user => (
                 <div className='user-block' id={user._id} key={user._id}> 

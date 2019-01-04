@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import io from 'socket.io-client';
-const socket = io('http://localhost:4000');
+import socket from '../socketIo';
 
 class MessageArea extends Component {
   constructor(props) {
@@ -57,12 +56,12 @@ class MessageArea extends Component {
     const {message} = this.state;
     const {user, toUser} = this.props;
     if (navigator.onLine) {
-      
       socket.emit('direct-message', {
         message,
         user1: user._id, 
         user2: toUser.userId,
         author: user.username,
+        to: toUser.username
       })
       document.getElementById('message').value = '';
     } else {
@@ -70,10 +69,11 @@ class MessageArea extends Component {
         infoMsg : 'Internet not available. Please connected to secure connection.'
       })
     }
+    console.log(socket);
   }
 
   getMessage = (()  =>{
-    socket.on('direct-chat', (msg) => {
+    socket.on('directChat', (msg) => {
       console.log(msg)
       this.setState({
         infoMsg : '',
