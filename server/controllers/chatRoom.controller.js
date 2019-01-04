@@ -1,4 +1,5 @@
 const ChatRoom = require('./../models/ChatRoom');
+const DirectMessage = require('./../models/DirectMessage');
 
 module.exports = {
   wakeUp : (req, res) => {
@@ -34,7 +35,7 @@ module.exports = {
       })
     })
   },
-  getAllMessagesForChatRoom : (req, res) => {
+  getAllMessagesForChatRoom: (req, res) => {
     const {roomId} = req.params;
     ChatRoom.findOne({_id : roomId})
       .populate('messages')
@@ -49,5 +50,24 @@ module.exports = {
           })
         }
       })
+  },
+  getAllPrivateMessages: (req, res) => {
+    const {user1, user2} = req.query;
+    DirectMessage.findOne({ user1, user2 }, (err,data) => {
+      if(!data) {
+        DirectMessage.findOne({ user1 : user2, user2 : user1 }, (err, data2) => {
+          if(data) {
+            console.log(data2)
+            return res.json({
+              messages : data2
+            })
+          }
+        })
+      }
+      console.log(data)
+      return res.json({
+        messages : data
+      })
+    })
   }
 }

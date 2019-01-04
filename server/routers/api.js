@@ -18,4 +18,6 @@ router.get('/logout', userController.logOut);
 
 router.get('/users', userController.getAllUsers);
 
+router.get('/messages', chatRoomController.getAllPrivateMessages);
+
 module.exports = router;

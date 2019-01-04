@@ -20,26 +20,31 @@ class DirectMessage extends Component {
           isLoading : false
         })
       }
-     })) 
+    })) 
   }
   
   handleClick = e => {
     e.preventDefault();
     const {id, innerHTML} = e.target;
+    const {user} = this.props;
+
     console.log(e.target.id)
     this.setState(state => ({
       ...state,
+      previousUser : state.toUser,
       toUser : {
         ...state.currentUser,
         userId : id,
         username : innerHTML 
       }
-    }))    
+    }), () => {
+      fetch(`/api/v1/messages?user1=${user._id}&user2=${id}`)
+    })    
   }
 
   render() {
     const {allUsers} = this.props;
-    const {isLoading, toUser} = this.state;
+    const {isLoading, toUser, previousUser} = this.state;
 
     return (
       isLoading ? <p>Loading...</p> : (
@@ -63,7 +68,8 @@ class DirectMessage extends Component {
 
 function mapStateToProps(state) {
   return {
-    allUsers : state.allUsers
+    allUsers : state.allUsers,
+    user : state.user
   }
 }
 

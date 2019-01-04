@@ -19,37 +19,10 @@ class MessageArea extends Component {
     })
   }
 
-  // {
-  //   infoMsg ? ( <p>{`${infoMsg} ${user.username}`}</p> ) : 
-  //   (
-  //     <div>
-        
-  //       <div className="messages wrapper">
-  //         {
-  //           messages && messages.map(message => (
-  //             message.author === user.username ? 
-  //             (
-  //               <div className="message-block block-right">
-  //                 <div className="message-sub_block right-sub_block">
-  //                   <p className="message-text">{message.message}</p>
-  //                   <p className="message-author">{'you'}</p>
-  //                 </div><p>{`${infoMsg} ${user.username}`}</p>
-  //               </div>
-  //             ) : 
-  //             (
-  //               <div className="message-block">
-  //                 <div className="message-sub_block">
-  //                   <p className="message-text">{message.message}</p>
-  //                   <p className="message-author">{message.author}</p>
-  //                 </div>
-  //               </div>
-  //             )
-  //           ))
-  //         }
-  //       </div>
-  //     </div>
-  //   )
-  // }
+  componentDidMount() {
+    const {user, toUser} = this.props;
+    
+  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -58,7 +31,7 @@ class MessageArea extends Component {
     if (navigator.onLine) {
       socket.emit('direct-message', {
         message,
-        user1: user._id, 
+        user1: user._id,
         user2: toUser.userId,
         author: user.username,
         to: toUser.username
