@@ -17,9 +17,11 @@
     width: 100%;
     cursor: pointer;
     transition: all ease 0.3s;
-  }&:hover {
-    padding: 0;
-    color: #fff;
-    background: #009688f0;
+    text-align: left;
+    &:hover {
+      padding: 0;
+      color: #fff;
+      background: #009688f0;
+    }
   }
 }
