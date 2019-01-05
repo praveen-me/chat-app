@@ -7,7 +7,7 @@ class MessageArea extends Component {
     super(props);
     this.state = {
       message : '',
-      messages : [],
+      messagesData : {},
       isLoading : false,
       infoMsg : ''
     }
@@ -20,9 +20,15 @@ class MessageArea extends Component {
   }
 
   componentDidMount() {
-    const {user, toUser} = this.props;
-    
+    console.log('Hello World')
   }
+  
+
+  setMessages = (() => {
+    this.setState({
+      messagesData : this.props.messages
+    })
+  })()
 
   handleSubmit = e => {
     e.preventDefault();
@@ -65,41 +71,7 @@ class MessageArea extends Component {
     return (
       isLoading ? 
       <p>Loading...</p> : (
-        <div className="direct-chat-area chat-area">
-          <div className="current-user">
-            <h3>{toUser.username}</h3>
-          </div>
-          <div className="messages wrapper">
-            {
-              messages && messages.map(message => (
-                message.author === user.username ? 
-                (
-                  <div className="message-block block-right">
-                    <div className="message-sub_block right-sub_block">
-                      <p className="message-text">{message.message}</p>
-                      <p className="message-author">{'you'}</p>
-                    </div>
-                    {
-                      !messages.length ? <p>{`${infoMsg} ${user.username}`}</p> : ''
-                    }
-                  </div>
-                ) : 
-                (
-                  <div className="message-block">
-                    <div className="message-sub_block">
-                      <p className="message-text">{message.message}</p>
-                      <p className="message-author">{message.author}</p>
-                    </div>
-                  </div>
-                )
-              ))
-            }
-          </div>
-          <form action="" className="direct-message-form message-form" onSubmit={this.handleSubmit}>
-            <input type="text" name="message" id="message" onChange={this.handleChange} className="text-field"/>
-            <button type="submit" className="btn">Submit</button>
-          </form>
-        </div>
+        
       )
       
     );

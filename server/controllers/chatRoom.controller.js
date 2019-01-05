@@ -57,9 +57,14 @@ module.exports = {
       if(data === null) {
         DirectMessage.findOne({ user1 : user2, user2 : user1 }, (err, data2) => {
           if(data2 !== null) {
-            return res.json({
-              messages : data2
-            })
+            DirectMessage.findOne({ user1 : user2, user2 : user1 })
+              .populate('messages')
+              .exec((err, populatedData) => {
+                return res.json({
+                  data : populatedData
+                })
+              })
+            
           } else {
             return res.status(302).json({
               msg : "You don't have any message. Please send your first."
@@ -67,9 +72,13 @@ module.exports = {
           }
         })
       } else {
-        return res.json({
-          messages : data
-        })
+        DirectMessage.findOne({ user1, user2 })
+          .populate('messages')
+          .exec((err, populatedData) => {
+            return res.json({
+              data : populatedData
+            })
+          })
       }
     })
   }
