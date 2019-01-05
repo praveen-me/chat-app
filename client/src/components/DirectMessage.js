@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-// import UsersList from './UsersList';
 import auth from '../store/actions/authActions';
-import MessageArea from './MessageArea';
 
 class DirectMessage extends Component {
   constructor(props) {
@@ -10,8 +8,7 @@ class DirectMessage extends Component {
     this.state = {
       isLoading: true,
       toUser: null,
-      messagesData : null,
-      messages : []
+      populatedData : {}
     }
   }
   
@@ -44,16 +41,27 @@ class DirectMessage extends Component {
       }
     }), () => {
       fetch(`/api/v1/messages?user1=${user._id}&user2=${id}`)
-        .then(res => res.json())
-        .then(data => this.setState({
-          messages : data
-        }))
+        .then(res => {
+          res.status === 302 ? 
+            res.json()
+              .then(data => {
+                this.setState({
+                  populatedData : data
+                })
+              })
+            : res.json()
+              .then(data => {
+                this.setState({
+                populatedData : data.data
+                })
+              })
+        })
     })    
   }
 
   render() {
-    const {allUsers} = this.props;
-    const {isLoading, toUser, previousUser, messages} = this.state;
+    const {allUsers, user} = this.props;
+    const {isLoading, toUser, populatedData} = this.state;
 
     return (
       isLoading ? <p>Loading...</p> : (
@@ -74,7 +82,7 @@ class DirectMessage extends Component {
           </div>
           <div className="messages wrapper">
             {
-              messages && messages.map(message => (
+                 populatedData.messages && populatedData.messages.map(message => (
                 message.author === user.username ? 
                 (
                   <div className="message-block block-right">
@@ -83,7 +91,7 @@ class DirectMessage extends Component {
                       <p className="message-author">{'you'}</p>
                     </div>
                     {
-                      !messages.length ? <p>{`${infoMsg} ${user.username}`}</p> : ''
+                      !populatedData.messages.length ? <p>{`${infoMsg} ${user.username}`}</p> : ''
                     }
                   </div>
                 ) : 
