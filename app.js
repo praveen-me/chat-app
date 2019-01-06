@@ -96,36 +96,23 @@ io.on('connection', (socket) => {
     io.sockets.emit('chat', msg)
   })
   socket.on('direct-message', (msg) => {
+    console.log(msg)
     const {user1, user2, message, author} = msg;
     DirectMessage.findOne({ user1: user1, user2: user2 }, (err, data) => {
       if(!data) {
-        DirectMessage.findOne({ user1 : user2, user2 : user1 }, (err, data2) => {
-          if(data2 === null) {
-            const newMessage = new Message({
-              message: message,
-              author: author,
-            })
-            newMessage.save((err, data) => {
-              const newDirectMessage = new DirectMessage({
-                user1: user1,
-                user2: user2,
-                messages: [data._id] 
-              })
-              newDirectMessage.save()
-            })
-            return;
-          } else {
-            const newMessage = new Message({
-              message: message,
-              author: author,
-            });
-            newMessage.save((err, msg) => {
-              DirectMessage.findOneAndUpdate({user1 : user2, user2: user1}, { $push : { messages : msg._id } }, { upsert: true }, (err, done) => {
-              })
-            })
-            return;
-          }
+        const newMessage = new Message({
+          message: message,
+          author: author,
         })
+        newMessage.save((err, data) => {
+          const newDirectMessage = new DirectMessage({
+            user1: user1,
+            user2: user2,
+            messages: [data._id] 
+          })
+          newDirectMessage.save()
+        })
+        return;
       } else {
         const newMessage = new Message({
           message: message,
