@@ -10,6 +10,11 @@ header {
   }
 }
 
+.logo {
+  color: #fff !important;
+  margin: 0.5rem 0;
+}
+
 .auth-buttons {
   font-size: 1.2rem;
   align-self: center;
@@ -19,9 +24,4 @@ header {
     margin: 0 1rem ;
     cursor: pointer;
   }
-}
-
-
-.logo {
-  margin: 0.5rem 0;
 }

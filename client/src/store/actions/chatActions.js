@@ -50,6 +50,11 @@ const chat = {
           cb(data)
         })
     }
+  },
+  getAllPrivateMessages : (user1, user2, cb) => {
+    fetch(`/api/v1/messages?user1=${user1}&user2=${user2}`)
+      .then(res => res.json())
+      .then(data => cb(data))
   }
 }
 

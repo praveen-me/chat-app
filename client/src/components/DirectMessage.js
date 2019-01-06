@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import auth from '../store/actions/authActions';
 import socket from '../socketIo';
-
+import chat from '../store/actions/chatActions';
 
 class DirectMessage extends Component {
   constructor(props) {
@@ -24,6 +24,7 @@ class DirectMessage extends Component {
         }, () => {
           const {user, allUsers} = this.props;
           fetch(`/api/v1/messages?user1=${user._id}&user2=${allUsers[0]._id}`)
+          this.getPopulatedMessages(user._id, allUsers[0]._id)
         })
       }
     })) 
@@ -66,29 +67,28 @@ class DirectMessage extends Component {
         username : innerHTML 
       }
     }), () => {
-      fetch(`/api/v1/messages?user1=${user._id}&user2=${id}`)
-        .then(res => {
-          res.status === 302 ? 
-            res.json()
-              .then(data => {
-                this.setState({
-                  messages : [],
-                  populatedData : data
-                })
-              })
-            : res.json()
-              .then(data => {
-                const {user1, user2, messages} = data.data
-                this.setState({
-                  messages : messages,
-                  populatedData : {
-                    user1,
-                    user2 
-                  }
-                })
-              })
-        })
+      this.getPopulatedMessages(user._id, id);
     })    
+  }
+
+  getPopulatedMessages = (user1, user2) => {
+    chat.getAllPrivateMessages(user1, user2, (data) => {
+      if(data.msg) {
+        this.setState({
+          messages : [],
+          populatedData : data
+        })
+      } else {
+        const {user1, user2, messages} = data.data;
+        this.setState({
+          messages : messages,
+          populatedData : {
+            user1,
+            user2 
+          }
+        })
+      }
+    })
   }
 
   handleChange = e => {
@@ -139,7 +139,6 @@ class DirectMessage extends Component {
                   <div className="message-block block-right">
                     <div className="message-sub_block right-sub_block">
                       <p className="message-text">{message.message}</p>
-                      <p className="message-author">{'you'}</p>
                     </div>
                     {
                       !messages.length ? <p>{`${infoMsg} ${user.username}`}</p> : ''
@@ -150,7 +149,6 @@ class DirectMessage extends Component {
                   <div className="message-block">
                     <div className="message-sub_block">
                       <p className="message-text">{message.message}</p>
-                      <p className="message-author">{message.author}</p>
                     </div>
                   </div>
                 )
