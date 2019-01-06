@@ -1,5 +1,3 @@
-import { bindActionCreators } from "redux";
-
 const auth =  {
   login : (data, cb) => {
     return dispatch => {

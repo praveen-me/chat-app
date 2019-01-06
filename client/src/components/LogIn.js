@@ -14,7 +14,7 @@ class LogIn extends Component {
     super(props);
     this.state = {
       isLoading : false,
-      errMSg : '',
+      errMsg : '',
       userDetails : {
         username: '',
         password: '',
@@ -41,33 +41,42 @@ class LogIn extends Component {
       isLoading : true
     })
 
-    dispatch(auth.login(this.state.userDetails, (isSucced) => {
-      console.log(isSucced);
-      if(isSucced) {
+    dispatch(auth.login(this.state.userDetails, (data) => {
+      if(data === true) {
         this.setState({
           isLoading : false
         }, () => {
           history.push('/');
-        })   
+        })
+      } else {
+        this.setState({
+          isLoading : false,
+          errMsg : data.msg
+        })
       }
     }))
   }
 
   render() {
+    const {isLoading, errMsg} = this.state;
     return (
       <main className="form-wrapper">
         <div className="start-block middle">
+          <h2 className="form-head">Log In</h2>
           <form className="user-form" onSubmit={this.handleSubmit}>
-          <label htmlFor="username">
-            Enter your username
-          </label>
-          <input type="text" name="username" onChange={this.handleChange} className="text-field"/>
-          <label htmlFor="password">
-            Enter your password
-          </label>
-          <input type="password" name="password" onChange={this.handleChange} className="text-field"/>
+            <label htmlFor="username">
+              Enter your username
+            </label>
+            <input type="text" name="username" onChange={this.handleChange} className="text-field"/>
+            <label htmlFor="password">
+              Enter your password
+            </label>
+            <input type="password" name="password" onChange={this.handleChange} className="text-field"/>
+            {
+              errMsg ? <p className="errMsg">{errMsg}</p> : ''
+            }
             <div className="right">
-              <button type="submit" className="btn submit">Go Ahead</button>
+              <button type="submit" className="btn submit">{isLoading ? 'Loading...' : 'Go Ahead'}</button>
             </div>
           </form>
         </div>

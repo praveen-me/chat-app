@@ -34,7 +34,6 @@ class DirectMessage extends Component {
     e.preventDefault();
     const {message, populatedData, toUser} = this.state;
     const {user} = this.props;
-    console.log(toUser)
     if (navigator.onLine) {
       socket.emit('direct-message', {
         message,
@@ -43,13 +42,14 @@ class DirectMessage extends Component {
         author: user.username,
         to: toUser.username
       })
+      this.getPopulatedMessages(user._id, toUser.userId);
       document.getElementById('message').value = '';
     } else {
       this.setState({
         infoMsg : 'Internet not available. Please connected to secure connection.'
       })
     }
-    console.log(socket);
+
   }
 
   handleClick = e => {
@@ -57,7 +57,6 @@ class DirectMessage extends Component {
     const {id, innerHTML} = e.target;
     const {user} = this.props;
 
-    console.log(e.target.id)
     this.setState(state => ({
       ...state,
       previousUser : state.toUser,
@@ -99,7 +98,6 @@ class DirectMessage extends Component {
 
   getMessage = (()  =>{
     socket.on('directChat', (msg) => {
-      console.log(msg)
       const {toUser} = this.state;
       const {user} = this.props;
       if(toUser.username === msg.author || msg.to === toUser.username) {
@@ -109,6 +107,23 @@ class DirectMessage extends Component {
       }
     })
   })()
+
+  handleDelete = e => {
+    const {populatedData, toUser} = this.state;
+    console.log(toUser)
+    const {user} = this.props;
+    if (navigator.onLine) {
+      fetch(`/api/v1/messages/${e.target.id}?user1=${populatedData.user1}&user2=${populatedData.user2}`, {
+        method : 'DELETE'
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.msg) {
+            this.getPopulatedMessages(user._id, toUser.userId);
+          }
+        })
+    }
+  }
 
   render() {
     const {allUsers, user} = this.props;
@@ -134,24 +149,17 @@ class DirectMessage extends Component {
           <div className="messages wrapper">
             {
               !populatedData.msg ? messages && messages.map(message => (
-                message.author === user.username ? 
-                (
-                  <div className="message-block block-right">
-                    <div className="message-sub_block right-sub_block">
+                <div className={`message-block ${message.author === user.username ? 'block-right ': ''}`}>
+                    <div className={` message-sub_block ${message.author === user.username ? 'right-sub_block': ''}`}>
                       <p className="message-text">{message.message}</p>
+                      {
+                        message.author === user.username ? <button className="delete-message" id={message._id ? message._id : ''} onClick={this.handleDelete}>x</button> : ''
+                      }
                     </div>
                     {
                       !messages.length ? <p>{`${infoMsg} ${user.username}`}</p> : ''
                     }
                   </div>
-                ) : 
-                (
-                  <div className="message-block">
-                    <div className="message-sub_block">
-                      <p className="message-text">{message.message}</p>
-                    </div>
-                  </div>
-                )
               )) : <p className="warn-msg">{`${populatedData.msg.slice(0, populatedData.msg.length - 1)} ${user.username}.`}</p>
             }
           </div>

@@ -16,7 +16,13 @@
   font-size: 1.3rem;
   color: #fff;
   display: block;
+  width: 500px;
+  border-radius: 5px;
   padding: 0.5rem 0;
+  padding-left: 1rem;
+  &:hover {
+    background: #000000b5;
+  }
 }
 
 .seperator {
@@ -29,6 +35,15 @@
   font-size: 1.2rem;
   font-variant: small-caps;
   font-weight: 300;
+}
+
+.direct-msg{
+  font-size: 1.5rem;
+  color: #fff;
+  transition: all 0.5s ease;
+  &:hover {
+    color: rgb(194, 194, 194);
+  }
 }
 
 @media screen and (max-width : 540px) {

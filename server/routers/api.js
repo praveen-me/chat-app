@@ -20,4 +20,6 @@ router.get('/users', userController.getAllUsers);
 
 router.get('/messages', chatRoomController.getAllPrivateMessages);
 
+router.delete('/messages/:messageId', chatRoomController.deleteMessage)
+
 module.exports = router;

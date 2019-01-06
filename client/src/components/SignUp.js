@@ -51,6 +51,7 @@ class SignUp extends Component {
       isLoading ? <p>Loading...</p> : (
         <main className="form-wrapper">
           <div className="start-block middle">
+            <h2 className="form-head">Sign Up</h2>
             <form className="user-form" onSubmit={this.handleSubmit}>
               <label htmlFor="fullName">
                 Enter your fullname

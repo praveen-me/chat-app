@@ -1,5 +1,6 @@
 const ChatRoom = require('./../models/ChatRoom');
 const DirectMessage = require('./../models/DirectMessage');
+const Message = require('./../models/Message');
 
 module.exports = {
   wakeUp : (req, res) => {
@@ -80,6 +81,18 @@ module.exports = {
             })
           })
       }
+    })
+  },
+  deleteMessage: (req, res) => {
+    const {messageId} = req.params;
+    const {user1, user2} = req.query;
+
+    DirectMessage.updateOne({user1, user2}, { $pull: {messages : messageId} }, (err, data) => {
+      Message.remove({_id : messageId}, (err, data) => {
+        return res.json({
+          msg : 'Message Deleted'
+        })
+      });
     })
   }
 }

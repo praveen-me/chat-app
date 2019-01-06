@@ -21,8 +21,6 @@ class ChatRoom extends Component {
         })
       }
     }))
-    // username: this.props.user.username,
-    // socketId : socket.socket.sessionid,
     socket.emit('socket-connected', {
       id : socket.id,
       username: this.props.user.username
@@ -50,7 +48,6 @@ class ChatRoom extends Component {
       },
       (isSucced) => {
         if(isSucced) {
-          // history.push(`/${this.state.roomName}`)
           this.setState({
             isLoading : false
           })      
@@ -90,7 +87,7 @@ class ChatRoom extends Component {
                   <button type="submit" className="btn submit">Add Chat Room</button>
                 </form>
                 <p className="seperator">OR</p>
-                <Link to="/direct">Go to Direct Messages</Link>
+                <Link to="/direct" className="direct-msg">Go to Direct Messages</Link>
               </div>
           ) : (
             <div className="no-chat wrapper">

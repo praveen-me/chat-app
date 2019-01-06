@@ -98,7 +98,7 @@ io.on('connection', (socket) => {
   socket.on('direct-message', (msg) => {
     console.log(msg)
     const {user1, user2, message, author} = msg;
-    DirectMessage.findOne({ user1: user1, user2: user2 }, (err, data) => {
+    DirectMessage.findOne({ user1, user2 }, (err, data) => {
       if(!data) {
         const newMessage = new Message({
           message: message,
