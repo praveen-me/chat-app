@@ -52,8 +52,9 @@ const auth =  {
     return (dispatch) => {
       console.log('logout called in actions')
       fetch('/api/v1/logout')
-        .then(res.json())
+        .then(res => res.json())
         .then(data => {
+          console.log(data)
           return dispatch({
             type : 'LOGOUT_SUCCESSFULL'
           })
@@ -71,7 +72,7 @@ const auth =  {
             users : data.users
           })
           return cb(true);
-        })
+        }) 
     }
   }
 } 

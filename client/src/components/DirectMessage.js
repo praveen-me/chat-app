@@ -73,6 +73,7 @@ class DirectMessage extends Component {
   getPopulatedMessages = (user1, user2) => {
     chat.getAllPrivateMessages(user1, user2, (data) => {
       if(data.msg) {
+        console.log(data)
         this.setState({
           messages : [],
           populatedData : data
