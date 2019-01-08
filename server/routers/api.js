@@ -8,6 +8,8 @@ router.get('/chat-rooms', chatRoomController.getAllChatRooms);
 
 router.post('/chat-rooms', chatRoomController.setChatRoom);
 
+router.delete('/chat-rooms/:roomId', chatRoomController.deleteChatRoom);
+
 router.get('/chat-rooms/:roomId', chatRoomController.getAllMessagesForChatRoom);
 
 router.post('/signup', userController.signUp);

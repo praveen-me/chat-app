@@ -12,18 +12,20 @@ class DirectMessage extends Component {
       toUser: {},
       populatedData : {},
       message : '', 
-      messages : []
+      messages : [],
+      onlineUsers : []
     }
   }
   
   componentDidMount() {
+    socket.emit('socket-connected', {})
     this.props.dispatch(auth.getAllUsers((isDone) => {
       if(isDone) {
         this.setState({
-          isLoading : false
+          isLoading : false,
+          toUser : this.props.allUsers[0]
         }, () => {
           const {user, allUsers} = this.props;
-          fetch(`/api/v1/messages?user1=${user._id}&user2=${allUsers[0]._id}`)
           this.getPopulatedMessages(user._id, allUsers[0]._id)
         })
       }
@@ -32,17 +34,16 @@ class DirectMessage extends Component {
   
   handleSubmit = e => {
     e.preventDefault();
-    const {message, populatedData, toUser} = this.state;
+    const {message, messages, populatedData, toUser} = this.state;
     const {user} = this.props;
     if (navigator.onLine) {
       socket.emit('direct-message', {
         message,
-        user1: !populatedData.msg ?  populatedData.user1 === user._id ? user._id : toUser.userId : user._id,
-        user2: !populatedData.msg ? populatedData.user2 === toUser.userId ? toUser.userId : user._id : toUser.userId,
+        user1: user._id,
+        user2: toUser.userId || toUser._id,
         author: user.username,
         to: toUser.username
       })
-      this.getPopulatedMessages(user._id, toUser.userId);
       document.getElementById('message').value = '';
     } else {
       this.setState({
@@ -53,21 +54,19 @@ class DirectMessage extends Component {
   }
 
   handleClick = e => {
-    e.preventDefault();
+    e.preventDefault();      
     const {id, innerHTML} = e.target;
     const {user} = this.props;
-
+    this.getPopulatedMessages(user._id, id);
+    
     this.setState(state => ({
       ...state,
-      previousUser : state.toUser,
       toUser : {
         ...state.currentUser,
         userId : id,
         username : innerHTML 
       }
-    }), () => {
-      this.getPopulatedMessages(user._id, id);
-    })    
+    }))    
   }
 
   getPopulatedMessages = (user1, user2) => {
@@ -97,8 +96,9 @@ class DirectMessage extends Component {
     })
   }
 
-  getMessage = (()  =>{
+  getMessage = (() => {
     socket.on('directChat', (msg) => {
+      console.log(msg)
       const {toUser} = this.state;
       const {user} = this.props;
       if(toUser.username === msg.author || msg.to === toUser.username) {
@@ -106,6 +106,15 @@ class DirectMessage extends Component {
           messages : [...this.state.messages, msg]
         })
       }
+    })
+  })()
+
+  getOnlineUsers = (() => {
+    socket.on('online-users', (users) => {
+      console.log(users)
+      this.setState({
+        onlineUsers : [...users] 
+      })
     })
   })()
 
@@ -128,7 +137,7 @@ class DirectMessage extends Component {
 
   render() {
     const {allUsers, user} = this.props;
-    const {isLoading, toUser, populatedData, messages} = this.state;
+    const {isLoading, toUser, populatedData, messages, onlineUsers} = this.state;
 
     return (
       isLoading ? <p>Loading...</p> : (
@@ -139,36 +148,34 @@ class DirectMessage extends Component {
               allUsers && allUsers.map(user => (
                 <div className='user-block' id={user._id} key={user._id}> 
                   <button onClick={this.handleClick} id={user._id}>{user.username}</button>
+                  <span className={`indicator ${onlineUsers.includes(user.username) ? 'green-dot' : 'red-dot'}`}></span>
                 </div>
               ))
             }
           </div>
           <div className="direct-chat-area chat-area">
-          <div className="current-user">
-            <h3>{toUser.username  || allUsers[0].username }</h3>
-          </div>
-          <div className="messages wrapper">
-            {
-              !populatedData.msg ? messages && messages.map(message => (
-                <div className={`message-block ${message.author === user.username ? 'block-right ': ''}`}>
-                    <div className={` message-sub_block ${message.author === user.username ? 'right-sub_block': ''}`}>
-                      <p className="message-text">{message.message}</p>
+            <div className="current-user">
+              <h3>{toUser.username  || allUsers[0].username }</h3>
+            </div>
+            <div className="messages wrapper">
+              {
+                populatedData.msg !== '' ? messages && messages.map(message => (
+                  <div className={`message-block ${message.author === user.username ? 'block-right ': ''}`} key={message._id}>
+                      <div className={` message-sub_block ${message.author === user.username ? 'right-sub_block': ''}`}>
+                        <p className="message-text">{message.message}</p>
+                      </div>
                       {
-                        message.author === user.username ? <button className="delete-message" id={message._id ? message._id : ''} onClick={this.handleDelete}>x</button> : ''
+                        !messages.length ? <p>{`${infoMsg} ${user.username}`}</p> : ''
                       }
                     </div>
-                    {
-                      !messages.length ? <p>{`${infoMsg} ${user.username}`}</p> : ''
-                    }
-                  </div>
-              )) : <p className="warn-msg">{`${populatedData.msg.slice(0, populatedData.msg.length - 1)} ${user.username}.`}</p>
-            }
+                )) : <p className="warn-msg">{`${populatedData.msg.slice(0, populatedData.msg.length - 1)} ${user.username}.`}</p>
+              }
+            </div>
+            <form action="" className="direct-message-form message-form" onSubmit={this.handleSubmit}>
+              <input type="text" name="message" id="message" onChange={this.handleChange} className="text-field"/>
+              <button type="submit" className="btn">Submit</button>
+            </form>
           </div>
-          <form action="" className="direct-message-form message-form" onSubmit={this.handleSubmit}>
-            <input type="text" name="message" id="message" onChange={this.handleChange} className="text-field"/>
-            <button type="submit" className="btn">Submit</button>
-          </form>
-        </div>
         </div>
       )    
     );

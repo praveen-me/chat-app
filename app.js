@@ -79,8 +79,12 @@ io.on('connection', (socket) => {
     if(socketDetails.id) {
       userSocketDetails[socketDetails.username] = socket.id;
     }
-  })
-  socket.on('message', (msg) => {
+    if(Object.keys(userSocketDetails).length > 0) {
+      console.log(userSocketDetails);
+      io.sockets.emit('online-users', [...Object.keys(userSocketDetails)])
+    }
+    0})
+    socket.on('message', (msg) => {
     // Saving Message in to db and pushing the id 
     // of the message to the specific chatroom
     const newMessage = new Message({
@@ -96,18 +100,25 @@ io.on('connection', (socket) => {
     io.sockets.emit('chat', msg)
   })
   socket.on('direct-message', (msg) => {
-    console.log(msg)
     const {user1, user2, message, author} = msg;
-    DirectMessage.findOne({ user1, user2 }, (err, data) => {
-      if(!data) {
+    console.log('user1', user1)
+    console.log('user2', user2)
+    
+    DirectMessage.find({
+      $or : [
+        {user1, user2},
+        {user1 : user2, user2 : user1}
+      ]
+    }, (err, data) => {
+      if(data.length === 0) {
         const newMessage = new Message({
           message: message,
           author: author,
         })
         newMessage.save((err, data) => {
           const newDirectMessage = new DirectMessage({
-            user1: user1,
-            user2: user2,
+            user1,
+            user2,
             messages: [data._id] 
           })
           newDirectMessage.save()
@@ -119,15 +130,52 @@ io.on('connection', (socket) => {
           author: author,
         });
         newMessage.save((err, data) => {
-          DirectMessage.findOneAndUpdate({user1 : user1, user2: user2}, { $push : { messages : data._id } }, { upsert: true }, (err, done) => {
+          DirectMessage.findOneAndUpdate({
+            $or : [
+            {user1, user2},
+            {user1 : user2, user2 : user1}
+          ]}, { $push : { messages : data._id } }, { upsert: true }, (err, done) => {
           })
         })
         return;
       }
     })
+    
+    // DirectMessage.findOne({user1, user2}, (err, data) => {
+      // if(!data) {
+      //   const newMessage = new Message({
+      //     message: message,
+      //     author: author,
+      //   })
+      //   newMessage.save((err, data) => {
+      //     const newDirectMessage = new DirectMessage({
+      //       user1: user1,
+      //       user2: user2,
+      //       messages: [data._id] 
+      //     })
+      //     newDirectMessage.save()
+      //   })
+      //   return;
+      // } else {
+      //   const newMessage = new Message({
+      //     message: message,
+      //     author: author,
+      //   });
+      //   newMessage.save((err, data) => {
+      //     DirectMessage.findOneAndUpdate({user1, user2}, { $push : { messages : data._id } }, { upsert: true }, (err, done) => {
+      //     })
+      //   })
+      //   return;
+      // }
+    // })
+    console.log(msg)
     socket.emit('directChat', msg);
     if(userSocketDetails[msg.to]) {
-      socket.to(`${userSocketDetails[msg.to]}`).emit('directChat', msg)
+      socket.to(userSocketDetails[msg.to]).emit('directChat', msg)
     }
+  })
+  socket.on('disconnect', () => {
+    delete userSocketDetails[Object.keys(userSocketDetails)[[Object.values(userSocketDetails).indexOf(socket.id)]]]
+    io.sockets.emit('online-users', [...Object.keys(userSocketDetails)])
   })
 });

@@ -15,7 +15,8 @@
 .chatroom-block {
   font-size: 1.3rem;
   color: #fff;
-  display: block;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
   width: 500px;
   border-radius: 5px;
   padding: 0.5rem 0;

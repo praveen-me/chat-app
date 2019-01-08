@@ -94,5 +94,16 @@ module.exports = {
         })
       });
     })
-  }
+  },
+  deleteChatRoom: (req, res) => {
+    const {roomId} = req.params;
+    let messages = []
+    ChatRoom.findOne({_id : roomId}, (err, room) => {
+      ChatRoom.remove({_id : roomId}, (err, data) => {
+        res.json({
+          msg : "Channel Deleted"
+        })
+      });
+    })
+  }    
 }

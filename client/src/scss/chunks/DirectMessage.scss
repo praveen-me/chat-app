@@ -14,7 +14,6 @@
     border: none;
     background: transparent;
     font-size: 1.8rem;
-    width: 100%;
     cursor: pointer;
     transition: all ease 0.3s;
     text-align: left;
@@ -46,4 +45,28 @@
   cursor: pointer;
   display: inline-block;
   color: #F44336;
+}
+
+.indicator {
+  vertical-align: text-top;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+}
+
+.red-dot {
+  background: red;
+}
+
+.green-dot {
+  background: #008100;
+}
+
+@media screen and (max-width : 650px) {
+  .user-block {
+    button {
+      font-size: 1.3rem;
+    }
+  }
 }

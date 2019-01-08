@@ -35,7 +35,7 @@ class ChatRoom extends Component {
  
   handleSubmit = e => {
     e.preventDefault();
-    const {dispatch, history, username} = this.props;
+    const {dispatch, history, user} = this.props;
     
     this.setState({
       isLoading : true
@@ -44,7 +44,7 @@ class ChatRoom extends Component {
     dispatch(chat.setChatRoom(
       {
       roomName : this.state.roomName,
-      author : username
+      author : user.username
       },
       (isSucced) => {
         if(isSucced) {
@@ -54,6 +54,14 @@ class ChatRoom extends Component {
         }
       }
     ))
+  }
+
+  handleDelete = e => {
+    const {id} = e.target;
+    fetch(`/api/v1/chat-rooms/${id}`, {
+      method : "DELETE"
+    })
+
   }
 
   render() {
@@ -73,11 +81,18 @@ class ChatRoom extends Component {
                 <p className="select-chatroom">Select your Chatroom</p>
                 {
                   chatRooms && chatRooms.map((room, i) => (
-                    <Link to={`/${room._id}/chat`} key={room._id} className="chatroom-block">
-                      <div className="chat-room" id={room._id}>
-                      {i+1}. {room.name}
-                      </div>
-                    </Link>
+                    <div>
+                      <Link to={`/${room._id}/chat`} key={room._id} className="chatroom-block">
+                        <div className="chat-room" id={room._id}>
+                        {i+1}. {room.name}
+                        </div>
+                        <p className="chatroom-author">{room.author}</p>
+                      </Link>
+                      <button 
+                      className="delete-message" 
+                      onClick={this.handleDelete}
+                      id={room._id}>x</button>
+                    </div>
                   ))
                 }
                 <p className="seperator">OR</p>
