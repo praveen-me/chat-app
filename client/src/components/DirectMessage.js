@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import auth from '../store/actions/authActions';
 import socket from '../socketIo';
 import chat from '../store/actions/chatActions';
+import mp3 from './../assets/quite-impressed.mp3'
+
 
 class DirectMessage extends Component {
   constructor(props) {
@@ -98,13 +100,15 @@ class DirectMessage extends Component {
 
   getMessage = (() => {
     socket.on('directChat', (msg) => {
-      console.log(msg)
       const {toUser} = this.state;
       const {user} = this.props;
       if(toUser.username === msg.author || msg.to === toUser.username) {
         this.setState({
           messages : [...this.state.messages, msg]
         })
+      }
+      if(msg.author !== user.username) {
+        const audio = document.getElementById('audio').play();
       }
     })
   })()
@@ -138,27 +142,28 @@ class DirectMessage extends Component {
   render() {
     const {allUsers, user} = this.props;
     const {isLoading, toUser, populatedData, messages, onlineUsers} = this.state;
-
+    
     return (
       isLoading ? <p>Loading...</p> : (
         <div className="direct-messages">
           <div className='users-list'>
-            <h2 className="users-header">Users</h2>
-            {
-              allUsers && allUsers.map(user => (
-                <div className='user-block' id={user._id} key={user._id}> 
-                  <button onClick={this.handleClick} id={user._id}>{user.username}</button>
-                  <span className={`indicator ${onlineUsers.includes(user.username) ? 'green-dot' : 'red-dot'}`}></span>
-                </div>
-              ))
+            <audio src={mp3} controls id="audio"/>
+          <h2 className="users-header">Users</h2>
+          {
+            allUsers && allUsers.map(user => (
+              <div className='user-block' id={user._id} key={user._id}> 
+                    <button onClick={this.handleClick} id={user._id}>{user.username}</button>
+                    <span className={`indicator ${onlineUsers.includes(user.username) ? 'green-dot' : 'red-dot'}`}></span>
+                  </div>
+                ))
             }
-          </div>
+            </div>
           <div className="direct-chat-area chat-area">
             <div className="current-user">
               <h3>{toUser.username  || allUsers[0].username }</h3>
             </div>
             <div className="messages wrapper">
-              {
+            {
                 populatedData.msg !== '' ? messages && messages.map(message => (
                   <div className={`message-block ${message.author === user.username ? 'block-right ': ''}`} key={message._id}>
                       <div className={` message-sub_block ${message.author === user.username ? 'right-sub_block': ''}`}>
