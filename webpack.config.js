@@ -52,9 +52,10 @@ module.exports = {
     port: 4000
   },
   output: {
-    filename: 'bundle.js',
     path: __dirname + '/dist/bundle/',
-    publicPath: '/static/'
+    publicPath: '/static/',
+    filename: "[name].bundle.js",
+    chunkFilename: "[name].bundle.js",
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
