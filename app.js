@@ -18,11 +18,11 @@ const ChatRoom = require('./server/models/ChatRoom');
 const Message = require('./server/models/Message');
 const DirectMessage = require('./server/models/DirectMessage');
 
-// necessary middlewares
+// necessary middleware
 app.use(bodyParser.json());
 app.use(cors())
 
-//Seting view for apps
+//Setting view for apps
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, './server/views'));
 
@@ -140,35 +140,6 @@ io.on('connection', (socket) => {
         return;
       }
     })
-    
-    // DirectMessage.findOne({user1, user2}, (err, data) => {
-      // if(!data) {
-      //   const newMessage = new Message({
-      //     message: message,
-      //     author: author,
-      //   })
-      //   newMessage.save((err, data) => {
-      //     const newDirectMessage = new DirectMessage({
-      //       user1: user1,
-      //       user2: user2,
-      //       messages: [data._id] 
-      //     })
-      //     newDirectMessage.save()
-      //   })
-      //   return;
-      // } else {
-      //   const newMessage = new Message({
-      //     message: message,
-      //     author: author,
-      //   });
-      //   newMessage.save((err, data) => {
-      //     DirectMessage.findOneAndUpdate({user1, user2}, { $push : { messages : data._id } }, { upsert: true }, (err, done) => {
-      //     })
-      //   })
-      //   return;
-      // }
-    // })
-    console.log(msg)
     socket.emit('directChat', msg);
     if(userSocketDetails[msg.to]) {
       socket.to(userSocketDetails[msg.to]).emit('directChat', msg)
