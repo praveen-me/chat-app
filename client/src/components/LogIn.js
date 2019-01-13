@@ -75,7 +75,7 @@ class LogIn extends Component {
             {
               errMsg ? <p className="errMsg">{errMsg}</p> : ''
             }
-            <div className="right">
+            <div className="">
               <button type="submit" className="btn submit">{isLoading ? 'Loading...' : 'Go Ahead'}</button>
             </div>
           </form>

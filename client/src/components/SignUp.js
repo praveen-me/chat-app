@@ -72,7 +72,7 @@ class SignUp extends Component {
               {
                 errMSg ? <p className="center warning-msg">{errMSg}</p> : ''
               }
-              <div className="right">
+              <div className="">
                 <button type="submit" className="btn submit">Go Ahead</button>
               </div>
             </form>

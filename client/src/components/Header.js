@@ -15,7 +15,7 @@ class Header extends Component {
     return (
       <header>  
         <div className="wrapper">
-          <Link to="/"><h1 className="logo">Chit Chatter</h1></Link>
+          <Link to="/"><h1 className="logo">Connect</h1></Link>
           {
             !user._id ? (
               <div className="auth-buttons">

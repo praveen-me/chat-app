@@ -26,7 +26,7 @@ app.use(cors());
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, './server/views'));
 
-app.use(express.static(path.join(__dirname, '/img')));
+app.use('/assets', express.static(path.join(__dirname, '/client/src/assets')));
 
 // Webpack config
 if (process.env.NODE_ENV === 'development') {
