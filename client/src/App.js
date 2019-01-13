@@ -2,6 +2,8 @@ import React, { Component, lazy, Suspense } from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'; 
 import './scss/app.scss';
 import Header from './components/Header';
+import Loader from './components/Loader';
+
 const LogIn = lazy(() => import(/* webpackChunkName: 'Login' */'./components/LogIn'));
 const ChatArea = lazy(() => import(/* webpackChunkName: 'ChatArea' */'./components/ChatArea'));
 const ChatRoom = lazy(() => import(/* webpackChunkName: 'ChatRoom' */'./components/ChatRoom'));
@@ -15,7 +17,7 @@ class App extends Component {
         <React.Fragment>
           <Header/>
           <Switch>
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<Loader />}>
               <Route path="/" exact component={ChatRoom} />
               <Route path="/login" component={LogIn} />
               <Route path="/:roomId/chat" exact component={ChatArea} />
