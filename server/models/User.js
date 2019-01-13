@@ -11,17 +11,17 @@ const userSchema = new mongoose.Schema({
 });
 
 // schema method for decrypt password and compare with the original one
-userSchema.methods.verifyPassword = function (userPassword, cb) {
-  // for userpassword === hash
-  bcrypt.compare(userPassword, this.password, function (err, res) {
+userSchema.methods.verifyPassword = function verifyPassword(userPassword, cb) {
+  // for userPassword === hash
+  bcrypt.compare(userPassword, this.password, (err, res) => {
     if (err) return cb(err, false);
-    return cb (null, res);
-  })
+    return cb(null, res);
+  });
 };
 
 // Hash the password before save
-userSchema.pre('save', function (next) {
-  const password = this.password;
+userSchema.pre('save', function preSave(next) {
+  const { password } = this;
 
   if (this.isModified(password)) return next();
 

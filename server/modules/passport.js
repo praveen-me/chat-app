@@ -1,6 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('./../models/User');
 
+// function for passport that have it's necessary methods
 module.exports = (passport) => {
   passport.serializeUser((user, done) => {
     done(null, user._id);
@@ -11,7 +12,7 @@ module.exports = (passport) => {
     });
   });
 
-   /*
+  /*
    * passport local strategy takes username and password
    * compare with the user's document in db
   */
@@ -22,7 +23,8 @@ module.exports = (passport) => {
         if (!user) {
           return done(null, false);
         }
-        return user.verifyPassword(password, (err, isMatched) => {
+        return user.verifyPassword(password, (e, isMatched) => {
+          if (e) throw e;
           if (!isMatched) {
             return done(null, false);
           }
@@ -31,4 +33,4 @@ module.exports = (passport) => {
       });
     },
   ));
-}
+};

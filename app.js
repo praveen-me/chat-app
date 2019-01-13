@@ -118,19 +118,20 @@ io.on('connection', (socket) => {
       } else {
         const newMessage = new Message({ message, author });
         newMessage.save((e, newMsg) => {
+          console.log(newMsg, user1, user2);
           if (e) throw err;
           DirectMessage.findOneAndUpdate({
             $or: [
               { user1, user2 },
               { user1: user2, user2: user1 },
             ],
-          }, { $push: { messages: newMsg._id } }, { upsert: true });
+          }, { $push: { messages: newMsg._id } }, { upsert: true }, (err, data) => {});
         });
       }
     });
     socket.emit('directChat', msg);
     if (userSocketDetails[msg.to]) {
-      socket.to(userSocketDetails[msg.to]).emit('directChat', msg)
+      socket.to(userSocketDetails[msg.to]).emit('directChat', msg);
     }
   });
   socket.on('disconnect', () => {

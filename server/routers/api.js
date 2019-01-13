@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const chatRoomController = require('./../controllers/chatRoom.controller')
+const chatRoomController = require('./../controllers/chatRoom.controller');
 const userController = require('./../controllers/user.controller');
 
 router.get('/wake-up', chatRoomController.wakeUp);
@@ -22,6 +22,6 @@ router.get('/users', userController.getAllUsers);
 
 router.get('/messages', chatRoomController.getAllPrivateMessages);
 
-router.delete('/messages/:messageId', chatRoomController.deleteMessage)
+router.delete('/messages/:messageId', chatRoomController.deleteMessage);
 
 module.exports = router;
