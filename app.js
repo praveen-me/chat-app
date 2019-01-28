@@ -91,6 +91,7 @@ io.on('connection', (socket) => {
       author: msg.author,
     });
     newMessage.save((err, currentMsg) => {
+      console.log(currentMsg)
       // pushing id of the current msg into the specific chatroom messages field
       ChatRoom.findOneAndUpdate({ _id: msg.currentChatRoomId },
         { $push: { messages: currentMsg._id } }, { upsert: true });

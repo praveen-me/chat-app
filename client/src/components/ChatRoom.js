@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import chat from '../store/actions/chatActions';
 import {Redirect, Link} from 'react-router-dom';
 import socket from '../socketIo';
-
+import Loader from './Loader';
 class ChatRoom extends Component {
   constructor(props) {
     super(props);
@@ -47,7 +47,7 @@ class ChatRoom extends Component {
       author : user.username
       },
       (isSucced) => {
-        if(isSucced) {
+        if (isSucced) {
           this.setState({
             isLoading : false
           })      
@@ -75,27 +75,23 @@ class ChatRoom extends Component {
       <div className="list-chatroom">
         {
           isLoading ? 
-          <p>Loading...</p> : 
+          <Loader />  : 
           chatRooms.length > 0 ? (
-            <div className="wrapper">
-                <p className="select-chatroom">Select your Chatroom</p>
+            <div className="wrapper dashboard">
+              <div className="room-list">
+                <p className="select-chatroom">Chat Rooms</p>
                 {
                   chatRooms && chatRooms.map((room, i) => (
-                    <div>
-                      <Link to={`/${room._id}/chat`} key={room._id} className="chatroom-block">
-                        <div className="chat-room" id={room._id}>
-                        {i+1}. {room.name}
-                        </div>
-                        <p className="chatroom-author">{room.author}</p>
-                      </Link>
-                      <button 
-                      className="delete-message" 
-                      onClick={this.handleDelete}
-                      id={room._id}>x</button>
-                    </div>
+                    <Link to={`/${room._id}/chat`} key={room._id} className="chatroom-block">
+                      <div className="line"></div>
+                      <div className="chat-room" id={room._id}>
+                      {room.name}
+                      </div>
+                    </Link>
                   ))
                 }
-                <p className="seperator">OR</p>
+              </div>
+              <div className="make-chatroom">
                 <p className="make-chatroom">Make your own Chatroom</p>
                 <form onSubmit={this.handleSubmit} className="chatroom-form"> 
                   <input type="text" name="roomName" id="" onChange={this.handleChange} className="text-field"/>
@@ -104,6 +100,7 @@ class ChatRoom extends Component {
                 <p className="seperator">OR</p>
                 <Link to="/direct" className="direct-msg">Go to Direct Messages</Link>
               </div>
+            </div>
           ) : (
             <div className="no-chat wrapper">
               <p className="seperator">OR</p>
